@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from tinymce.models import HTMLField
 
 STATUS = (
     (0, "Draft"),
@@ -9,7 +10,8 @@ STATUS = (
 
 class Post(models.Model):
     title = models.CharField(max_length=64, unique=True)
-    content = models.TextField()
+    snippet = models.CharField(max_length=255)
+    content = HTMLField()
     status = models.IntegerField(choices=STATUS, default=0)
     image = models.ImageField(
         upload_to="post",

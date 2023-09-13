@@ -2,6 +2,8 @@ from django import forms
 
 from .models import Comment, Post
 
+from tinymce.widgets import TinyMCE
+
 
 class PostForm(forms.ModelForm):
 
@@ -11,7 +13,8 @@ class PostForm(forms.ModelForm):
 
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
-            "content": forms.Textarea(attrs={"class": "form-control content2"}),
+            "snippet": forms.Textarea(attrs={"class": "form-control"}),
+            "content": TinyMCE(attrs={'cols': 80, 'rows': 30}),
             "status": forms.Select(attrs={"class": "form-select"}),
             "image": forms.FileInput(attrs={"class": "form-control"}),
             "author": forms.HiddenInput(),

@@ -1,12 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import FormMixin
 
 from .models import Comment, Post
 from .forms import CommentForm, PostForm
@@ -15,9 +13,29 @@ from .forms import CommentForm, PostForm
 class PostList(generic.ListView):
     queryset = Post.objects.filter(status=1).order_by("-created_on")
 
-
 class PostDetail(generic.DetailView):
     queryset = Post.objects.all().order_by("-created_on")
+
+def detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        request.POST._mutable = True
+        request.POST["author"] = request.user
+        request.POST["post"] = post
+        request.POST._mutable = False
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = CommentForm()
+
+    return render(request, 'blog/post_detail.html', {'post': post, 'form': form})
 
 
 class CreatePost(LoginRequiredMixin, generic.CreateView):

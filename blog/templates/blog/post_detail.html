@@ -23,9 +23,12 @@
             </a>
         {% endif %}
         <h2 class="card-title">{{ post.title|title }}</h2>
-        <small>
+        <span class="badge bg-secondary">
             {{ post.author.username|title }} - {{ post.created_on|date:"M d, Y" }}
-        </small>
+        </span>
+        <div class="alert alert-warning">
+            {{ post.snippet|safe }}
+        </div>
         <div class="card-text">
             {{ post.content|safe|linebreaksbr }}
         </div>
@@ -59,6 +62,13 @@
                 No comments yet.
             </div>
         {% endfor %}
+        <h4>New Comment</h4>
+        <hr>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary float-end">Comment</button>
+        </form>
     </div>
 </div>
 {% endblock %}

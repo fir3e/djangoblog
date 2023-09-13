@@ -9,15 +9,16 @@
             <div class="card h-100 bg-info-subtle" style="width: 18rem;">
                 <img src="{% get_media_prefix %}{{ post.image }}" class="card-img-top" alt="{{ post.title }}">
                 <div class="card-body">
-                    <h5 class="card-title"><a class="text-decoration-none" href="{% url 'post_detail' pk=post.pk %}">{{ post.title|title }}</a></h5>
+                    <h5 class="card-title"><a class="text-decoration-none" href="{% url 'post_detail' pk=post.pk %}">{{ post.title|title }}</a></h5><span class="badge bg-secondary">{{ post.author.username|title }} - {{ post.created_on|date:"M d, Y" }}</span>
                     <div class="card-text text-body-secondary">
-                        {{ post.content|safe|linebreaksbr|truncatechars:100 }}
-                        {% if post.content|length > 100 %}...{% endif %}
+                        {{ post.snippet }}
                     </div>
                     <p class="card-text">
-                        <small class="text-info-emphasis">
-                        {{ post.author.username|title }} - {{ post.created_on|date:"M d, Y" }}
-                        </small>
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-outline-secondary btn-sm">
+                                comments <span class="badge {% if post.comments.count > 0 %}text-bg-warning{% else %}text-bg-secondary{% endif %}">{{ post.comments.count }}</span>
+                            </button>
+                        </div>
                     </p>
                 </div>
             </div>

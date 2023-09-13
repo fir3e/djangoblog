@@ -1,6 +1,10 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 
+{% block head %}
+{{ form.media }}
+{% endblock %}
+
 {% block content %}
 <div class="card mt-4 rounded">
     <div class="card-body">
@@ -23,10 +27,6 @@
         </form>
     </div>
 </div>
-
-<script>
-    new MediumEditor('.content')
-</script>
 
 <script>
     function previewImage(file) {
